@@ -57,7 +57,7 @@ chain balance. Block units are arithmetic, not a balance you own.
 
 | Source | Used for |
 |---|---|
-| `api.squeekchain.com/v1/status` | difficulty to start at, cadence, core status, block height, distance |
+| `api.squeekchain.com/v1/status` | `builder.anchor.workPerThousandBlocks` (starting difficulty), `builder.anchor.blockHeight` (which block seeds the shift), `measurement.coreStatus` and `measurement.freshness` (live / ghost / offline) |
 | `SqueekCore.state()` on Sepolia, `0xFD6C166D4B8E2962E65746a13e5a0797CD4dE0c4` | fallback for difficulty and block height when the API is silent |
 | `api.squeekchain.com/v1/accounts/<address>` | holder tier, read from the browser |
 | `community.squeekchain.com/v1/community/profiles/<code>` | holder tier by member code, via `api.php` because that host only sends CORS to squeekchain.com |
