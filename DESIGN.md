@@ -1,6 +1,6 @@
 # DESIGN.md
 
-Direction for Squeek Leg Day. This file records the direction the build already follows, so
+Direction for Squeek Pack. This file records the direction the build already follows, so
 the rules in `antislop.md` have something to filter against. If any line here does not match
 what you want, change it here first and the build follows.
 

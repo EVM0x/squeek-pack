@@ -1,4 +1,4 @@
-# Squeek Leg Day
+# Squeek Pack
 
 An arcade that runs on Squeekchain's own arithmetic. Squeektoshi's wheel produces work one
 pass at a time, and work is counted in rounds of ten minutes. You close the rounds: his
@@ -6,7 +6,7 @@ running arrives as bursts, a round holds **10,000 work units**, and work never m
 one round to the next. Pack what fits, let the rest go, and the round is priced at the
 difficulty your own rounds set.
 
-One page. No wallet, no sign-up, nothing to buy. https://squeeklegday.evm0x.com
+One page. No wallet, no sign-up, nothing to buy. https://squeekpack.evm0x.com
 
 ## The four expressions it runs on
 

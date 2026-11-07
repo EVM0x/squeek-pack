@@ -1,4 +1,4 @@
-/* SQUEEK LEG DAY.
+/* SQUEEK PACK.
 
    The room is a workshop bench, not a dashboard. Paper is a chalk green, ink is
    green-black, and there is one accent: machine green, spent only on the work
@@ -116,7 +116,6 @@ button { font-family: inherit; }
 
 .wordmark span {
   color: var(--accent);
-  margin-left: 0.14em;
 }
 
 .tagline {

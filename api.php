@@ -1,5 +1,5 @@
 <?php
-/* Squeek Leg Day, the one server-side piece.
+/* Squeek Pack, the one server-side piece.
 
    Two Squeekchain endpoints matter and neither is readable from a static page:
 
@@ -45,7 +45,7 @@ function get_json(string $url): array
         CURLOPT_FOLLOWLOCATION => false,
         CURLOPT_TIMEOUT        => TIMEOUT,
         CURLOPT_CONNECTTIMEOUT => 5,
-        CURLOPT_USERAGENT      => 'squeeklegday/1.0 (+https://squeekchain.com)',
+        CURLOPT_USERAGENT      => 'squeekpack/1.0 (+https://squeekchain.com)',
         CURLOPT_HTTPHEADER     => ['Accept: application/json'],
     ]);
     $body = curl_exec($ch);

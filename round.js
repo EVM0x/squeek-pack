@@ -1,4 +1,4 @@
-/* SHIFT SEED, the part of Squeek Leg Day that comes from the chain and not from
+/* SHIFT SEED, the part of Squeek Pack that comes from the chain and not from
    the API, plus the card a player posts afterwards.
 
    Every shift is played against the block that was open when the player pressed
@@ -8,7 +8,7 @@
    That is checkable without trusting this page: read SqueekCore.state() on
    Sepolia, run the same FNV-1a below, compare. Nothing here signs or spends. */
 
-const LegRound = (() => {
+const SqueekRound = (() => {
   // FNV-1a over the hex characters of the state. Small, stable, and easy enough
   // to reimplement in any language, which is the point: the seed has to be
   // verifiable by someone who does not trust this file.
@@ -71,7 +71,7 @@ const LegRound = (() => {
 
 /* CARD, the thing a player actually wants to post. Drawn on a canvas so the file
    leaves the page as a PNG, with no server and no screenshot tool. */
-const LegCard = (() => {
+const SqueekCard = (() => {
   const W = 1200;
   const H = 630;
 
@@ -123,14 +123,14 @@ const LegCard = (() => {
     x.fillStyle = C.bg;
     x.fillRect(0, 0, W, H);
 
-    // wordmark, set the way the HUD sets it: three words, and the third one is
+    // wordmark, set the way the HUD sets it: two words, and the second one is
     // measured rather than guessed so the accent never crowds the first
     x.fillStyle = C.ink;
     x.font = '800 50px ' + DISPLAY;
     x.fillText("SQUEEK", 72, 104);
     const sqW = x.measureText("SQUEEK").width + x.measureText(" ").width;
     x.fillStyle = C.accent;
-    x.fillText("LEG DAY", 72 + sqW, 104);
+    x.fillText("PACK", 72 + sqW, 104);
     x.fillStyle = C.soft;
     x.font = '400 21px ' + MONO;
     x.fillText("PACK THE ROUND", 72, 142);
@@ -246,7 +246,7 @@ const LegCard = (() => {
 
   async function save(stats) {
     const cv = render(stats);
-    const name = "squeek-leg-day-" + stats.blocks + (stats.tag ? "-" + String(stats.tag).toLowerCase() : "") + ".png";
+    const name = "squeek-pack-" + stats.blocks + (stats.tag ? "-" + String(stats.tag).toLowerCase() : "") + ".png";
     const blob = await new Promise((res) => cv.toBlob(res, "image/png"));
     if (!blob) return false;
 
@@ -255,7 +255,7 @@ const LegCard = (() => {
     try {
       const file = new File([blob], name, { type: "image/png" });
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], title: "Squeek Leg Day", text: stats.line });
+        await navigator.share({ files: [file], title: "Squeek Pack", text: stats.line });
         return true;
       }
     } catch { /* fall through to a download */ }

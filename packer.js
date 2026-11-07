@@ -1,4 +1,4 @@
-/* SQUEEK LEG DAY, the arcade around the rules.
+/* SQUEEK PACK, the arcade around the rules.
 
    pack.js holds the arithmetic and knows nothing about the page. This file holds
    the page and knows nothing about the arithmetic: it asks for the current
@@ -16,11 +16,11 @@
   const $ = (id) => document.getElementById(id);
   const BURST_MS = 1900;      // how long a burst stays in the chute
   const SETTLE_MS = 2100;     // how long the payout panel holds before moving on
-  const DIFF_KEY = "legday.difficulty.v1";
-  const THEME_KEY = "legday.theme.v1";
+  const DIFF_KEY = "squeekpack.difficulty.v1";
+  const THEME_KEY = "squeekpack.theme.v1";
   // named SITE, not URL: `URL` is a global constructor and shadowing it inside
   // this scope is a trap for anyone who later needs a blob URL here
-  const SITE = "https://squeeklegday.evm0x.com";
+  const SITE = "https://squeekpack.evm0x.com";
 
   const el = {
     board: $("board"), mode: $("mode"), holderChip: $("holderChip"),
@@ -114,17 +114,17 @@
 
   function paintRule() {
     if (!shift) return;
-    const cap = LegPack.CAPACITY;
-    const room = LegPack.remaining(shift);
+    const cap = SqueekPack.CAPACITY;
+    const room = SqueekPack.remaining(shift);
     const pct = (shift.bin / cap) * 100;
 
-    el.roundNo.textContent = Math.min(shift.roundIndex + 1, LegPack.ROUNDS) + "/" + LegPack.ROUNDS;
+    el.roundNo.textContent = Math.min(shift.roundIndex + 1, SqueekPack.ROUNDS) + "/" + SqueekPack.ROUNDS;
     el.packedV.textContent = fmt(shift.bin);
     el.leftV.textContent = fmt(room);
     el.fill.style.width = pct.toFixed(3) + "%";
     el.track.setAttribute("aria-valuenow", String(shift.bin));
 
-    const size = LegPack.current(shift);
+    const size = SqueekPack.current(shift);
     if (size != null && phase === "play") {
       const fits = size <= room;
       el.ghostFill.hidden = false;
@@ -145,7 +145,7 @@
   }
 
   function paintChute() {
-    const size = LegPack.current(shift);
+    const size = SqueekPack.current(shift);
     if (size == null) {
       el.burstValue.textContent = "\u2014";
       el.burstNo.textContent = "";
@@ -153,7 +153,7 @@
       el.burstHint.textContent = "";
       return;
     }
-    const room = LegPack.remaining(shift);
+    const room = SqueekPack.remaining(shift);
     const fits = size <= room;
     const index = Math.min(shift.cursor + 1, shift.bursts.length);
 
@@ -166,7 +166,7 @@
       ? fmt(room) + " room \u00b7 taking it leaves " + fmt(room - size)
       : "needs " + fmt(size) + ", only " + fmt(room) + " left \u2014 it will be rejected";
 
-    const next = LegPack.peek(shift);
+    const next = SqueekPack.peek(shift);
     if (tier && next != null) {
       el.nextHint.hidden = false;
       el.nextHint.textContent = "HOLDER SIGHT \u00b7 next burst " + fmt(next);
@@ -178,7 +178,7 @@
 
   function paintReadout() {
     if (!shift) return;
-    el.blocksV.textContent = fmtBig(LegPack.blocks(shift));
+    el.blocksV.textContent = fmtBig(SqueekPack.blocks(shift));
     el.unitsV.textContent = fmtBig(shift.totalUnits);
     el.diffV.textContent = fmt(shift.difficulty);
     el.tagV.textContent = shift.tag === "LOCAL" || !shift.tag
@@ -221,10 +221,10 @@
   // The burst was not taken in time, so it left the chute without being counted.
   function expire() {
     if (phase !== "play") return;
-    const r = LegPack.pass(shift);
+    const r = SqueekPack.pass(shift);
     if (r.ok) {
       flash("TIME \u00b7 " + fmt(r.size) + " LEFT THE CHUTE", "bad");
-      LegAudio.pass();
+      SqueekAudio.pass();
     }
     advance();
   }
@@ -234,13 +234,13 @@
   function take() {
     if (phase !== "play") return;
     stopClock();
-    const r = LegPack.take(shift);
+    const r = SqueekPack.take(shift);
     if (r.ok) {
-      const fill = shift.bin / LegPack.CAPACITY;
-      LegAudio.take(fill);
+      const fill = shift.bin / SqueekPack.CAPACITY;
+      SqueekAudio.take(fill);
       flash("TOOK " + fmt(r.size) + " \u00b7 " + fmt(shift.bin) + " PACKED", "good");
     } else if (r.why === "over") {
-      LegAudio.reject();
+      SqueekAudio.reject();
       flash("REJECTED \u00b7 " + fmt(r.size) + " DOES NOT FIT IN " + fmt(r.fits), "bad");
     }
     advance();
@@ -249,9 +249,9 @@
   function letPass() {
     if (phase !== "play") return;
     stopClock();
-    const r = LegPack.pass(shift);
+    const r = SqueekPack.pass(shift);
     if (r.ok) {
-      LegAudio.pass();
+      SqueekAudio.pass();
       flash("PASSED \u00b7 " + fmt(r.size) + " LOST, WORK NEVER MOVES ROUNDS", "");
     }
     advance();
@@ -259,7 +259,7 @@
 
   function advance() {
     if (phase !== "play") return;
-    if (LegPack.roundOver(shift)) {
+    if (SqueekPack.roundOver(shift)) {
       closeRound();
     } else {
       paint();
@@ -271,7 +271,7 @@
 
   function closeRound() {
     stopClock();
-    const row = LegPack.settle(shift);
+    const row = SqueekPack.settle(shift);
     phase = "settle";
     // the board's own state drives which panel is on stage: without this the
     // payout stays behind the play-state rule and never appears
@@ -281,15 +281,15 @@
     el.settleTitle.textContent = sealed ? "ROUND SEALED" : "ROUND CLOSED";
     el.settleSub.textContent = sealed
       ? "10,000 of 10,000 packed"
-      : fmt(LegPack.CAPACITY - row.work) + " work units of room lost";
+      : fmt(SqueekPack.CAPACITY - row.work) + " work units of room lost";
     el.sWork.textContent = fmt(row.work);
     el.sUnits.textContent = fmtBig(row.units);
     el.sBlocks.textContent = fmtBig(row.blocks);
     el.sDiff.textContent = fmt(row.difficultyAfter);
     el.settle.hidden = false;
 
-    if (sealed) LegAudio.seal();
-    else LegAudio.settle(row.blocks > 0n);
+    if (sealed) SqueekAudio.seal();
+    else SqueekAudio.settle(row.blocks > 0n);
 
     paintReadout();
     el.takeBtn.hidden = true;
@@ -314,7 +314,7 @@
     el.passBtn.hidden = false;
     paint();
     startClock();
-    flash("ROUND " + (shift.roundIndex + 1) + " \u00b7 " + fmt(LegPack.ROUND_WORK) + " WORK RUNNING", "");
+    flash("ROUND " + (shift.roundIndex + 1) + " \u00b7 " + fmt(SqueekPack.ROUND_WORK) + " WORK RUNNING", "");
   }
 
   /* ---------- the shift ---------- */
@@ -323,13 +323,13 @@
     if (phase === "play" || phase === "settle") return;
     closeAllSheets();
 
-    const chain = LegChain.state;
-    const round = chain.round || LegRound.local();
+    const chain = SqueekChain.state;
+    const round = chain.round || SqueekRound.local();
     const difficulty = chain.difficulty > 0
       ? chain.difficulty
-      : (readNum(DIFF_KEY) || LegPack.MIN_DIFFICULTY);
+      : (readNum(DIFF_KEY) || SqueekPack.MIN_DIFFICULTY);
 
-    shift = LegPack.newShift({
+    shift = SqueekPack.newShift({
       difficulty,
       seed: round.seed,
       tag: round.number ? round.tag : "LOCAL",
@@ -366,18 +366,18 @@
     el.startBtn.textContent = "RUN ANOTHER SHIFT";
     paint();
 
-    const blocks = LegPack.blocks(shift);
+    const blocks = SqueekPack.blocks(shift);
     const units = shift.totalUnits;
     const work = shift.totalWork;
-    const fillPct = Math.round(LegPack.fillRate(shift) * 100);
-    const chain = LegChain.state;
+    const fillPct = Math.round(SqueekPack.fillRate(shift) * 100);
+    const chain = SqueekChain.state;
     const modeText = chain.status === "live" ? "LIVE" : chain.status === "ghost" ? "GHOST" : "OFFLINE";
 
     el.rBlocks.textContent = fmtBig(blocks);
     el.rUnits.textContent = fmtBig(units);
     el.rWork.textContent = fmt(work);
     el.rFill.textContent = fillPct + "%";
-    el.rSealed.textContent = shift.sealed + " of " + LegPack.ROUNDS;
+    el.rSealed.textContent = shift.sealed + " of " + SqueekPack.ROUNDS;
     el.rDiff.textContent = fmt(shift.startDifficulty) + " \u2192 " + fmt(shift.difficulty);
     el.rTag.textContent = shift.roundNumber ? "#" + shift.roundNumber + " \u00b7 " + shift.tag : shift.tag;
     el.rMode.textContent = modeText;
@@ -385,7 +385,7 @@
 
     el.rLead.textContent =
       "Four rounds, " + fmt(work) + " work units packed out of the " +
-      fmt(LegPack.CAPACITY * LegPack.ROUNDS) + " the rounds could hold. " +
+      fmt(SqueekPack.CAPACITY * SqueekPack.ROUNDS) + " the rounds could hold. " +
       "Difficulty walked from " + fmt(shift.startDifficulty) + " to " + fmt(shift.difficulty) +
       ", so the last round was priced " +
       (shift.rounds.length > 1
@@ -395,9 +395,9 @@
         : "once") + ".";
 
     el.rLine.textContent =
-      "SQUEEK LEG DAY \u00b7 " + fmtBig(blocks) + " blocks \u00b7 " + fmtBig(units) +
+      "SQUEEK PACK \u00b7 " + fmtBig(blocks) + " blocks \u00b7 " + fmtBig(units) +
       " block units \u00b7 " + fmt(work) + " work packed (" + fillPct + "% of capacity) \u00b7 " +
-      shift.sealed + "/" + LegPack.ROUNDS + " rounds sealed \u00b7 seed " + shift.tag + " \u00b7 " + SITE;
+      shift.sealed + "/" + SqueekPack.ROUNDS + " rounds sealed \u00b7 seed " + shift.tag + " \u00b7 " + SITE;
 
     el.rNote.textContent =
       "Block units are the whitepaper's arithmetic on the difficulty above, not a chain balance. " +
@@ -478,11 +478,11 @@
 
   function cardStats() {
     return {
-      blocks: Number(LegPack.blocks(shift)),
+      blocks: Number(SqueekPack.blocks(shift)),
       units: shift.totalUnits.toString(),
       work: shift.totalWork,
-      capacity: LegPack.CAPACITY * LegPack.ROUNDS,
-      capacityPerRound: LegPack.CAPACITY,
+      capacity: SqueekPack.CAPACITY * SqueekPack.ROUNDS,
+      capacityPerRound: SqueekPack.CAPACITY,
       rounds: shift.rounds.map((r) => ({
         work: r.work,
         blocks: Number(r.blocks),
@@ -492,7 +492,7 @@
       tag: shift.tag,
       block: shift.roundNumber,
       tier: tier ? tier.tier.name : null,
-      url: "squeeklegday.evm0x.com",
+      url: "squeekpack.evm0x.com",
       line: el.rLine.textContent,
     };
   }
@@ -536,14 +536,14 @@
   }
 
   function paintSoundBtn() {
-    const muted = LegAudio.isMuted();
+    const muted = SqueekAudio.isMuted();
     el.soundBtn.textContent = muted ? "SOUND OFF" : "SOUND ON";
     el.soundBtn.setAttribute("aria-pressed", String(!muted));
   }
 
   function toggleSound() {
-    LegAudio.unlock();
-    const muted = LegAudio.setMuted(!LegAudio.isMuted());
+    SqueekAudio.unlock();
+    const muted = SqueekAudio.setMuted(!SqueekAudio.isMuted());
     el.soundBtn.textContent = muted ? "SOUND OFF" : "SOUND ON";
     el.soundBtn.setAttribute("aria-pressed", String(!muted));
   }
@@ -587,14 +587,14 @@
     el.holderStatus.dataset.tone = "";
     el.holderCheck.disabled = true;
 
-    LegHolder.check(query)
+    SqueekHolder.check(query)
       .then((result) => {
         if (!result) {
           el.holderStatus.textContent = "Nothing found. Check the address or code and try again.";
           el.holderStatus.dataset.tone = "bad";
           return;
         }
-        LegHolder.save(result);
+        SqueekHolder.save(result);
         paintHolder(result);
       })
       .catch((err) => {
@@ -612,7 +612,7 @@
   /* ---------- wiring ---------- */
 
   function wire() {
-    el.startBtn.addEventListener("click", () => { LegAudio.unlock(); startShift(); });
+    el.startBtn.addEventListener("click", () => { SqueekAudio.unlock(); startShift(); });
     el.takeBtn.addEventListener("click", take);
     el.passBtn.addEventListener("click", letPass);
     el.nextBtn.addEventListener("click", nextRound);
@@ -644,7 +644,7 @@
     el.againBtn.addEventListener("click", () => { closeSheet(el.results); startShift(); });
     el.cardBtn.addEventListener("click", async () => {
       el.cardBtn.disabled = true;
-      const ok = await LegCard.save(cardStats());
+      const ok = await SqueekCard.save(cardStats());
       el.cardBtn.textContent = ok ? "CARD SAVED" : "CARD FAILED";
       setTimeout(() => { el.cardBtn.textContent = "SAVE CARD"; el.cardBtn.disabled = false; }, 2200);
     });
@@ -655,7 +655,7 @@
       if (e.key === "Enter") { e.preventDefault(); checkHolder(); }
     });
     el.holderClear.addEventListener("click", () => {
-      LegHolder.clear();
+      SqueekHolder.clear();
       el.holderInput.value = "";
       paintHolder(null);
     });
@@ -679,7 +679,7 @@
       if (e.key === " " || e.key === "Spacebar" || e.key === "Enter") {
         if (phase === "play") { e.preventDefault(); take(); }
         else if (phase === "settle") { e.preventDefault(); nextRound(); }
-        else if (phase === "idle" || phase === "over") { e.preventDefault(); LegAudio.unlock(); startShift(); }
+        else if (phase === "idle" || phase === "over") { e.preventDefault(); SqueekAudio.unlock(); startShift(); }
         return;
       }
       if (e.key === "ArrowDown" || e.key === "Backspace") {
@@ -705,7 +705,7 @@
     wire();
 
     try {
-      const saved = LegHolder.active();
+      const saved = SqueekHolder.active();
       if (saved) paintHolder(saved);
     } catch { /* a broken stored profile is not worth a crash */ }
 
@@ -721,13 +721,13 @@
     el.unitsV.textContent = "0";
     el.tagV.textContent = "no seed";
 
-    LegChain.start(paintChain);
+    SqueekChain.start(paintChain);
   }
 
   // A read-only handle on the live shift. The engine is already testable on its
   // own; this makes the wired game testable too, which is how the rejection and
   // seal paths get exercised without a human clicking them.
-  window.LegDay = { state: () => ({ phase, shift }) };
+  window.SqueekPack = { state: () => ({ phase, shift }) };
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", boot);

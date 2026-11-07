@@ -6,7 +6,7 @@
    the API is down. No wallet, no key, no transaction: one HTTP GET and one
    eth_call every five seconds. */
 
-const LegChain = (() => {
+const SqueekChain = (() => {
   const API = "https://api.squeekchain.com/v1/status";
   const CORE = "0xFD6C166D4B8E2962E65746a13e5a0797CD4dE0c4";
   const RPCS = [
@@ -82,8 +82,8 @@ const LegChain = (() => {
     if (!height) return;
     if (state.round && state.round.number === height) return;
     const round = state.core
-      ? LegRound.fromState(state.core, height)
-      : LegRound.fromHeight(height);
+      ? SqueekRound.fromState(state.core, height)
+      : SqueekRound.fromHeight(height);
     if (round) state.round = round;
   }
 

@@ -1,4 +1,4 @@
-/* SQUEEK LEG DAY, the packing rules.
+/* SQUEEK PACK, the packing rules.
 
    Everything in this file is arithmetic from the Squeekchain whitepaper and
    nothing else. No DOM, no network, no clock: a shift is a pure function of a
@@ -25,7 +25,7 @@
    priced at the difficulty earlier rounds set, and difficulty is a ratchet: a
    heavy round makes every later round worth less per work unit. */
 
-const LegPack = (() => {
+const SqueekPack = (() => {
   const CAPACITY = 10000;        // work units a round can hold, per the paper
   const ROUNDS = 4;              // rounds in one shift
   // Twelve bursts that add up to 13,000: he runs 3,000 more than the round can

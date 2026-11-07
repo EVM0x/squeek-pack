@@ -1,9 +1,9 @@
-/* Squeek Leg Day sound. Synthesised with WebAudio, so the arcade ships no audio
+/* Squeek Pack sound. Synthesised with WebAudio, so the arcade ships no audio
    files: every tone is generated from the same numbers the round is counted
    from. Nothing is fetched, nothing is licensed, nothing is sampled. */
 
 (function () {
-  const KEY = "legday.sound.v1";
+  const KEY = "squeekpack.sound.v1";
   const Ctx = window.AudioContext || window.webkitAudioContext;
 
   let ctx = null;
@@ -95,5 +95,5 @@
     return muted;
   }
 
-  window.LegAudio = { unlock, take, pass, reject, seal, settle, setMuted, isMuted: () => muted, isReady: ready };
+  window.SqueekAudio = { unlock, take, pass, reject, seal, settle, setMuted, isMuted: () => muted, isReady: ready };
 })();

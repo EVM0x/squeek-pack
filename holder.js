@@ -1,4 +1,4 @@
-/* HOLDER SHIFT, the part of Squeek Leg Day that a Squeekchain profile opens.
+/* HOLDER SHIFT, the part of Squeek Pack that a Squeekchain profile opens.
 
    Three rules shape this file.
 
@@ -31,10 +31,10 @@
 
    Nothing here signs, spends, or stores a key. */
 
-const LegHolder = (() => {
+const SqueekHolder = (() => {
   const API = "api.php";
   const ACCOUNTS = "https://api.squeekchain.com/v1/accounts/";
-  const KEY = "legday.holder.v1";
+  const KEY = "squeekpack.holder.v1";
 
   // weight counts a staked Squeek twice: staking is the action that actually
   // puts the NFT to work, so it should move you up the ladder faster than a
