@@ -6,6 +6,7 @@
 <title>Squeek Pack: pack the round</title>
 <meta name="description" content="His work arrives in bursts and a round holds 10,000 work units. Pack what fits before the round closes. The rules are the Squeekchain whitepaper's, replayed.">
 <meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://squeekpack.evm0x.com/">
 <script>
 try {
   var saved = localStorage.getItem("squeekpack.theme.v1");
@@ -440,7 +441,7 @@ try {
           <tr><td><code>PRIME</code></td><td>weight 6 or more: one burst of sight, tier stamped on the card</td></tr>
         </tbody>
       </table>
-      <p class="sheet__note" id="holderNote">An address is read through <code>api.squeekchain.com/v1/accounts/</code>. A member code is read through <code>community.squeekchain.com/v1/community/profiles/</code>, which only sends CORS headers to squeekchain.com, so <code>api.php</code> in this folder fetches it server-side and hands back nothing but the badge ids, the Aura and the rank. Neither read is signed, so neither can prove the profile is yours. That is on purpose: sight is a courtesy, not a claim. Nothing is stored on the server, and the tier stays in this browser.</p>
+      <p class="sheet__note" id="holderNote">An address is read straight from <code>api.squeekchain.com/v1/accounts/</code>, and that is the half that works here. A member code has to go through <code>community.squeekchain.com/v1/community/profiles/</code>, which only sends CORS headers to squeekchain.com; <code>api.php</code> in this folder is the proxy for that, and it needs a host that runs PHP. This copy is served static, so member codes answer with a note saying so rather than pretending. Paste an address. Neither read is signed, so neither can prove the profile is yours. That is on purpose: sight is a courtesy, not a claim. Nothing is stored on the server, and the tier stays in this browser.</p>
     </div>
   </aside>
 

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>No such page: Squeek Pack</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#000000">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<style>
+  :root { --bg:#000; --ink:#f5f5f5; --dim:#8a8a8a; --line:#222; --accent:#eb0004; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; height:100%; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: "Cascadia Code", "JetBrains Mono", ui-monospace, monospace;
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+  }
+  main { max-width: 34rem; }
+  .mark { display:block; width:44px; height:44px; margin-bottom: 22px; }
+  .mark rect:first-of-type { fill:none; stroke:#4a4a4a; stroke-width:2.6; }
+  .mark .packed { fill: var(--accent); }
+  .mark .ticks { fill: var(--bg); }
+  p.k { margin:0 0 10px; font-size:11px; letter-spacing:.18em; color: var(--dim); }
+  h1 { margin:0 0 14px; font-size: clamp(24px,6vw,34px); line-height:1.1; letter-spacing:-.01em; }
+  p { margin:0 0 20px; font-size:14px; line-height:1.65; color: var(--dim); }
+  a {
+    display:inline-block; padding:11px 18px; border:1px solid var(--accent);
+    color: var(--accent); text-decoration:none; font-size:11px; letter-spacing:.14em;
+  }
+  a:hover, a:focus-visible { background: var(--accent); color:#000; }
+  a:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+</style>
+</head>
+<body>
+<main>
+  <svg class="mark" viewBox="0 0 48 48" aria-hidden="true">
+    <rect x="6" y="7" width="36" height="34"/>
+    <rect class="packed" x="8.5" y="21" width="31" height="17.5"/>
+    <g class="ticks"><rect x="15" y="21" width="2" height="17.5"/><rect x="23" y="21" width="2" height="17.5"/><rect x="31" y="21" width="2" height="17.5"/></g>
+  </svg>
+  <p class="k">404</p>
+  <h1>That page is not on the bench.</h1>
+  <p>The round is still one page. Whatever you were looking for was never packed, or it was let pass.</p>
+  <a href="/">BACK TO THE ROUND</a>
+</main>
+</body>
+</html>

@@ -1192,3 +1192,50 @@ kbd {
 .board[data-state="offline"] .readout dd[data-money] { color: var(--faint); }
 .board[data-state="idle"] .readout__cell[data-money],
 .board[data-state="offline"] .readout__cell[data-money] { border-top-color: var(--line); }
+
+/* ---------- thumbs, not cursors ----------
+
+   The board is tuned to fit one screen on a 320 wide phone, so the controls
+   above it are drawn at 26px and the document links below are set at their
+   text height. A mouse hits those. A thumb does not. On a coarse pointer the
+   hit area is grown to 44px through a transparent pseudo element, centred on
+   the control, so the drawing stays exactly the size it was and nothing in
+   the layout moves. Horizontal growth is left alone on the HUD: its buttons
+   sit 4px apart and wider targets would overlap each other. */
+
+@media (pointer: coarse) {
+  .ghostbtn, .primary, .jump a, .foot a[href], .calc__presets button,
+  .faq summary, label[for] {
+    position: relative;
+  }
+
+  .ghostbtn::after, .primary::after, .jump a::after,
+  .foot a[href]::after, .calc__presets button::after,
+  .faq summary::after, label[for]::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: max(100%, 44px);
+    pointer-events: auto;
+  }
+
+  /* these rows have room between neighbours, so they can also grow sideways */
+  .jump a::after, .foot a[href]::after, .calc__presets button::after,
+  .faq summary::after, label[for]::after {
+    left: 50%;
+    right: auto;
+    width: max(100%, 44px);
+    transform: translate(-50%, -50%);
+  }
+
+  .calc__presets button { min-width: 44px; }
+
+  /* the slider is dragged, not tapped: give the track a taller strip to grab */
+  .calc__slider { min-height: 44px; }
+}
+
+/* a label pointing at a control is part of that control */
+label[for] { cursor: pointer; }

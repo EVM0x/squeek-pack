@@ -242,9 +242,13 @@ const SqueekSections = (() => {
     const note = document.getElementById("wheelNote");
     if (note && chain.difficulty) {
       const perUnit = SqueekPack.unitsFor(1, chain.difficulty);
+      // the paper floors, so one work unit is never a whole number of block
+      // units. Saying "worth 114,364,135" and then multiplying it by a thousand
+      // would not reach the number printed beside it, so the remainder is named.
       note.textContent =
         "At this difficulty one work unit is worth " + fmt(perUnit.toString()) +
-        " block units, so a burst of 1,000 pays " + fmt(SqueekPack.unitsFor(1000, chain.difficulty).toString()) + ".";
+        " block units plus a remainder, so a burst of 1,000 pays " +
+        fmt(SqueekPack.unitsFor(1000, chain.difficulty).toString()) + ".";
     }
   }
 

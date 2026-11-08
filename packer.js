@@ -16,6 +16,10 @@
   const $ = (id) => document.getElementById(id);
   const BURST_MS = 1900;      // how long a burst stays in the chute
   const SETTLE_MS = 2100;     // how long the payout panel holds before moving on
+  // A new burst is painted the instant the last one leaves, with no animation to
+  // slow a thumb down. Without a short lock, one fat-fingered double tap spends
+  // two decisions the player never got to read.
+  const LANDING_MS = 260;
   const DIFF_KEY = "squeekpack.difficulty.v1";
   const THEME_KEY = "squeekpack.theme.v1";
   // named SITE, not URL: `URL` is a global constructor and shadowing it inside
@@ -48,6 +52,7 @@
   let shift = null;
   let phase = "idle";       // idle | play | settle | over
   let deadline = 0;
+  let liveAt = 0;           // a burst cannot be acted on before this instant
   let raf = 0;
   let settleTimer = 0;
   let tier = null;
@@ -261,6 +266,7 @@
   function startClock() {
     stopClock();
     deadline = performance.now() + BURST_MS;
+    liveAt = performance.now() + LANDING_MS;
     el.timerBar.style.transform = "scaleX(1)";
     const step = (now) => {
       const left = deadline - now;
@@ -290,7 +296,7 @@
   /* ---------- actions ---------- */
 
   function take() {
-    if (phase !== "play") return;
+    if (phase !== "play" || performance.now() < liveAt) return;
     stopClock();
     const r = SqueekPack.take(shift);
     if (r.ok) {
@@ -305,7 +311,7 @@
   }
 
   function letPass() {
-    if (phase !== "play") return;
+    if (phase !== "play" || performance.now() < liveAt) return;
     stopClock();
     const r = SqueekPack.pass(shift);
     if (r.ok) {
