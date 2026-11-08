@@ -179,7 +179,7 @@
     const size = SqueekPack.current(s);
 
     if (size == null) {
-      el.burstValue.textContent = "\u2014";
+      el.burstValue.textContent = "\u2013";
       el.burstNo.textContent = "";
       el.chute.dataset.fit = "none";
       el.burstHint.textContent = "Reading the wheel before the first burst.";
@@ -199,7 +199,7 @@
     el.takeLabel.textContent = fits ? "TAKE IT" : "DOES NOT FIT";
     el.burstHint.textContent = fits
       ? fmt(room) + " room \u00b7 taking it leaves " + fmt(room - size)
-      : "needs " + fmt(size) + ", only " + fmt(room) + " left \u2014 it will be rejected";
+      : "needs " + fmt(size) + ", only " + fmt(room) + " left: it will be rejected";
 
     if (showing) {
       el.nextHint.hidden = false;
@@ -788,7 +788,7 @@
     el.takeBtn.hidden = true;
     el.passBtn.hidden = true;
     el.settle.hidden = true;
-    el.burstValue.textContent = "\u2014";
+    el.burstValue.textContent = "\u2013";
     el.burstNo.textContent = "";
     el.burstUnit.textContent = "WORK UNITS";
     el.burstHint.textContent = "Reading the wheel before the first burst.";
