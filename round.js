@@ -81,8 +81,8 @@ const SqueekCard = (() => {
   function palette() {
     const dark = document.documentElement.dataset.theme !== "light";
     return dark
-      ? { bg: "#000000", ink: "#f5f5f5", soft: "#b9b9b9", accent: "#eb0004", line: "#222222", dim: "#333333" }
-      : { bg: "#ffffff", ink: "#0a0a0a", soft: "#3a3a3a", accent: "#eb0004", line: "#dcdcdc", dim: "#c4c4c4" };
+      ? { bg: "#000000", ink: "#f5f5f5", soft: "#b9b9b9", accent: "#eb0004", money: "#ffc247", line: "#222222", dim: "#333333" }
+      : { bg: "#ffffff", ink: "#0a0a0a", soft: "#3a3a3a", accent: "#eb0004", money: "#7a5200", line: "#dcdcdc", dim: "#c4c4c4" };
   }
 
   function fmt(n) {
@@ -161,7 +161,7 @@ const SqueekCard = (() => {
     // is the only number set at display size.
     const score = fmt(s.blocks);
     const size = fitFont(x, score, 430, 168, DISPLAY);
-    x.fillStyle = C.ink;
+    x.fillStyle = C.money;
     x.font = '800 ' + size + 'px ' + DISPLAY;
     x.fillText(score, 66, 330);
     x.fillStyle = C.soft;

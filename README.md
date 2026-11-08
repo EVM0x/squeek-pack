@@ -68,8 +68,8 @@ Real: the round cap, the reject rule, the pricing, the difficulty ratchet, the b
 boundary, the starting difficulty, the shift seed.
 
 The arcade, and labelled as such on the page: the clock is compressed (a burst waits about
-two seconds instead of ten minutes), and holder status buys **sight** — one burst of preview
-— not score. Nothing here signs, spends, or holds anything, and no number on screen is a
+two seconds instead of ten minutes), and holder status buys **sight**, one burst of preview,
+not score. Nothing here signs, spends, or holds anything, and no number on screen is a
 chain balance. Block units are arithmetic, not a balance you own.
 
 ## Data

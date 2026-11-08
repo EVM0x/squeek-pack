@@ -101,11 +101,11 @@ try {
     <dl class="readout">
       <div class="readout__cell">
         <dt class="k">BLOCKS</dt>
-        <dd class="v v--big" id="blocksV">0</dd>
+        <dd class="v v--big" id="blocksV" data-money>0</dd>
       </div>
-      <div class="readout__cell">
+      <div class="readout__cell" data-money>
         <dt class="k">BLOCK UNITS</dt>
-        <dd class="v" id="unitsV">0</dd>
+        <dd class="v" id="unitsV" data-money>0</dd>
       </div>
       <div class="readout__cell">
         <dt class="k">DIFFICULTY</dt>
@@ -154,8 +154,8 @@ try {
         <button class="ghostbtn" type="button" data-work="10000">SEALED</button>
       </div>
       <dl class="calc__out">
-        <div><dt class="k">BLOCK UNITS</dt><dd class="v" id="calcUnits">0</dd></div>
-        <div><dt class="k">SQUEEK BLOCKS</dt><dd class="v" id="calcBlocks">0</dd></div>
+        <div><dt class="k">BLOCK UNITS</dt><dd class="v" id="calcUnits" data-money>0</dd></div>
+        <div><dt class="k">SQUEEK BLOCKS</dt><dd class="v" id="calcBlocks" data-money>0</dd></div>
         <div><dt class="k">DIFFICULTY AFTER</dt><dd class="v" id="calcDiff">0</dd></div>
         <div><dt class="k">ROUND FILLED</dt><dd class="v" id="calcFill">0%</dd></div>
       </dl>
@@ -326,8 +326,8 @@ try {
       </div>
       <p class="sheet__lead" id="rLead"></p>
       <dl class="sheet__grid">
-        <div><dt>Blocks</dt><dd id="rBlocks">0</dd></div>
-        <div><dt>Block units</dt><dd id="rUnits">0</dd></div>
+        <div><dt>Blocks</dt><dd id="rBlocks" data-money>0</dd></div>
+        <div><dt>Block units</dt><dd id="rUnits" data-money>0</dd></div>
         <div><dt>Work packed</dt><dd id="rWork">0</dd></div>
         <div><dt>Capacity filled</dt><dd id="rFill">0%</dd></div>
         <div><dt>Rounds sealed</dt><dd id="rSealed">0 of 4</dd></div>

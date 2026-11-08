@@ -1,8 +1,8 @@
 /* SQUEEK PACK.
 
-   The room is a workshop bench, not a dashboard. Black paper, white ink, and one
-   accent: EVM0x red, spent only on the work that has actually been packed and on
-   the one button that commits it.
+   The room is a workshop bench, not a dashboard. Black paper, white ink, two
+   colours with jobs: EVM0x red for the shop's identity and every action, amber
+   for the one thing the chain pays. Nothing else is allowed a colour.
 
    The palette is evm0x.com's own: #000 paper, #f5f5f5 ink, #EB0004 accent, #222
    hairlines. Same shop, different bench.
@@ -28,6 +28,11 @@
   --accent-lit: #ff6b6b;
   --pad: #1a0403;
   --gold: #e0b341;
+  /* Money. Red is the shop's identity and its actions; amber is the only colour
+     on the bench that means "this is what the chain paid you". One number, one
+     meaning. #ffc247 clears AA on every surface here at 12:1 or better. */
+  --money: #ffc247;
+  --money-line: rgba(255, 194, 71, 0.42);
   --red: #ff5252;
   --live-bg: #1a0403;
   --ghost-bg: #1a1508;
@@ -55,6 +60,8 @@
   --accent-lit: #a00003;
   --pad: #f7dedd;
   --gold: #7a5200;
+  --money: #7a5200;
+  --money-line: rgba(122, 82, 0, 0.38);
   --red: #b00003;
   --live-bg: #fdeceb;
   --ghost-bg: #f8f0d9;
@@ -1139,3 +1146,26 @@ kbd {
   .jump a { font-size: 8px; padding: 3px 5px; }
   .log__table { font-size: 10px; }
 }
+
+/* ---------- money ----------
+
+   One rule, one colour: anything the chain pays you is amber, everything else is
+   ink or red. Amber never appears on a control, so the eye can tell a number you
+   earned from a thing you can press. Red stays the shop's identity and every
+   action on the bench. */
+
+.readout dd[data-money],
+.calc__out dd[data-money],
+.log__totals b[data-money],
+.log__table td[data-money],
+.sheet__grid dd[data-money] { color: var(--money); }
+
+/* the hairline over a money cell is amber too, so the rule itself says which
+   numbers are payout without adding a label */
+.readout__cell[data-money] { border-top-color: var(--money-line); }
+
+/* an idle board has no reading, so it has no payout to colour */
+.board[data-state="idle"] .readout dd[data-money],
+.board[data-state="offline"] .readout dd[data-money] { color: var(--faint); }
+.board[data-state="idle"] .readout__cell[data-money],
+.board[data-state="offline"] .readout__cell[data-money] { border-top-color: var(--line); }

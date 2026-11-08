@@ -28,6 +28,10 @@ Nothing floats, nothing glows, nothing is a card except the two sheets that inte
 The bench runs evm0x.com's palette: black paper, white ink, one red. Night is the default,
 because the shop it belongs to is black.
 
+Amber is the second colour and it has exactly one job: it marks money. Every number the
+chain pays is amber, every control and every piece of identity is red or ink. Amber never
+lands on a button, so a number you earned can never be mistaken for a thing you press.
+
 | Role | Value (night) | Value (day) | Why |
 |---|---|---|---|
 | Paper | `#000000` | `#f5f5f5` | evm0x.com's own background, unchanged. Pure black, no blue-grey tint. |
@@ -35,6 +39,7 @@ because the shop it belongs to is black.
 | Ink | `#f5f5f5` | `#0a0a0a` | evm0x.com's text colour. 19.3:1 on black. |
 | Brand red | `#eb0004` | `#eb0004` | evm0x.com's accent, used for fills only: the packed rule, the timer, the primary button, the card's stamp. |
 | Red text | `#ff3b3b` | `#c40003` | The same red lifted (night) or deepened (day) so red text clears AA on its plate: 5.94:1 and 5.75:1. The brand red as text is 4.53:1 on pure black and 4.25:1 on the plate, so it is not used for type. |
+| Money | `#ffc247` | `#7a5200` | The only colour that means "this is what you were paid": blocks and block units in the readout, the calculator, the log, the results sheet and the share card. 13.06:1 on black, 6.35:1 on the day paper. Never used on a control. |
 | Ghost gold | `#e0b341` | `#7a5200` | State: he is asleep, the difficulty is a replay, no settlement. |
 | Miss red | `#ff5252` | `#b00003` | State: a burst was rejected, or an endpoint is unreachable. |
 | Hairline | `#222222` | `#dcdcdc` | evm0x.com's border colour. Rules and ticks, drawn not coloured. |

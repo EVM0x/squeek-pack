@@ -75,6 +75,7 @@ const SqueekSections = (() => {
       ].forEach((text, i) => {
         const td = document.createElement("td");
         td.textContent = text;
+        if (i === 1) td.dataset.money = "";   // blocks: the only paid column
         if (i === 0) td.title = r.t ? new Date(r.t).toLocaleString() : "";
         tr.appendChild(td);
       });
