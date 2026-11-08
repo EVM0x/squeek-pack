@@ -34,6 +34,9 @@ Two consequences the game is built around:
 
 ## Playing
 
+- The chute is loaded before you touch anything. The burst sitting in it is the shift's own
+  first burst, built from the block the page is reading, and START hands that same shift over
+  rather than dealing a new one. So the number you decide on is the number you get.
 - A **burst** is one unbroken run, so it carries a work count: 150 units is nine seconds,
   2,500 is two and a half minutes.
 - **TAKE IT** (`space` / `enter`) adds it to the round. **LET IT PASS** (`↓` / `backspace`)

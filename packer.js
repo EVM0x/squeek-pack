@@ -53,6 +53,14 @@
   let tier = null;
   let lastFocus = null;
 
+  /* The shift waiting in the chute before START. Not a sample and not a mock: it
+     is the same object startShift hands to the round, built from the seed the
+     page is reading, so the number on screen is the number that arrives. It is
+     rebuilt only when the block behind the seed changes, because a new block is
+     a new stream. */
+  let preview = null;
+  let previewRoundKey = null;
+
   /* ---------- formatting ---------- */
 
   const fmt = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -110,22 +118,40 @@
       el.tagV.textContent = "#" + s.round.number + " \u00b7 " + s.round.tag;
       el.tagV.dataset.round = "seeded";
     }
+
+    /* Keep the chute loaded. A reading that carries a new block means a new
+       burst stream, so the preview is rebuilt and repainted; a reading that
+       only moves the difficulty leaves the bursts alone, because difficulty
+       prices work and never decides it. */
+    if (phase === "idle" || phase === "over") {
+      const key = s.round ? String(s.round.number) : "local";
+      if (!preview || previewRoundKey !== key) {
+        buildPreview(s);
+        paint();
+      } else if (s.difficulty > 0) {
+        preview.difficulty = s.difficulty;
+        preview.startDifficulty = s.difficulty;
+      }
+    }
   }
 
   function paintRule() {
-    if (!shift) return;
+    const s = phase === "idle" ? preview : shift;
+    if (!s) return;
     const cap = SqueekPack.CAPACITY;
-    const room = SqueekPack.remaining(shift);
-    const pct = (shift.bin / cap) * 100;
+    const room = SqueekPack.remaining(s);
+    const pct = (s.bin / cap) * 100;
 
-    el.roundNo.textContent = Math.min(shift.roundIndex + 1, SqueekPack.ROUNDS) + "/" + SqueekPack.ROUNDS;
-    el.packedV.textContent = fmt(shift.bin);
+    el.roundNo.textContent = Math.min(s.roundIndex + 1, SqueekPack.ROUNDS) + "/" + SqueekPack.ROUNDS;
+    el.packedV.textContent = fmt(s.bin);
     el.leftV.textContent = fmt(room);
     el.fill.style.width = pct.toFixed(3) + "%";
-    el.track.setAttribute("aria-valuenow", String(shift.bin));
+    el.track.setAttribute("aria-valuenow", String(s.bin));
 
-    const size = SqueekPack.current(shift);
-    if (size != null && phase === "play") {
+    const size = SqueekPack.current(s);
+    if (size != null && (phase === "play" || phase === "idle")) {
+      // idle: the ghost is the burst already in the chute, so the room it would
+      // eat is visible before the shift starts rather than after the first click
       const fits = size <= room;
       el.ghostFill.hidden = false;
       el.ghostFill.style.left = pct.toFixed(3) + "%";
@@ -135,9 +161,11 @@
       el.ghostFill.hidden = true;
     }
 
-    if (shift.bin === cap) {
+    if (phase === "idle") {
+      el.ruleNote.textContent = "A round holds 10,000 \u00b7 twelve bursts bring 13,000.";
+    } else if (s.bin === cap) {
       el.ruleNote.textContent = "Round sealed: 10,000 of 10,000.";
-    } else if (shift.bin >= cap * 0.9) {
+    } else if (s.bin >= cap * 0.9) {
       el.ruleNote.textContent = fmt(room) + " work units of room left.";
     } else {
       el.ruleNote.textContent = "A round holds 10,000 work units.";
@@ -145,20 +173,27 @@
   }
 
   function paintChute() {
-    const size = SqueekPack.current(shift);
+    // idle and over both show the shift on deck, so the chute is never a dash
+    const showing = phase === "idle" || phase === "over";
+    const s = showing ? preview : shift;
+    const size = SqueekPack.current(s);
+
     if (size == null) {
       el.burstValue.textContent = "\u2014";
       el.burstNo.textContent = "";
       el.chute.dataset.fit = "none";
-      el.burstHint.textContent = "";
+      el.burstHint.textContent = "Reading the wheel before the first burst.";
+      el.nextHint.hidden = true;
+      el.nextHint.textContent = "";
       return;
     }
-    const room = SqueekPack.remaining(shift);
+
+    const room = SqueekPack.remaining(s);
     const fits = size <= room;
-    const index = Math.min(shift.cursor + 1, shift.bursts.length);
+    const index = Math.min(s.cursor + 1, s.bursts.length);
 
     el.burstValue.textContent = fmt(size);
-    el.burstNo.textContent = index + "/" + shift.bursts.length;
+    el.burstNo.textContent = phase === "over" ? "NEXT SHIFT" : index + "/" + s.bursts.length;
     el.chute.dataset.fit = fits ? "fits" : "over";
     el.takeBtn.dataset.fit = fits ? "fits" : "over";
     el.takeLabel.textContent = fits ? "TAKE IT" : "DOES NOT FIT";
@@ -166,7 +201,13 @@
       ? fmt(room) + " room \u00b7 taking it leaves " + fmt(room - size)
       : "needs " + fmt(size) + ", only " + fmt(room) + " left \u2014 it will be rejected";
 
-    const next = SqueekPack.peek(shift);
+    if (showing) {
+      el.nextHint.hidden = false;
+      el.nextHint.textContent = "OPENING BURST \u00b7 WHAT START DEALS";
+      return;
+    }
+
+    const next = SqueekPack.peek(s);
     if (tier && next != null) {
       el.nextHint.hidden = false;
       el.nextHint.textContent = "HOLDER SIGHT \u00b7 next burst " + fmt(next);
@@ -177,14 +218,31 @@
   }
 
   function paintReadout() {
-    if (!shift) return;
-    el.blocksV.textContent = fmtBig(SqueekPack.blocks(shift));
-    el.unitsV.textContent = fmtBig(shift.totalUnits);
-    el.diffV.textContent = fmt(shift.difficulty);
-    el.tagV.textContent = shift.tag === "LOCAL" || !shift.tag
+    const s = phase === "idle" ? preview : shift;
+    if (!s) return;
+    el.blocksV.textContent = fmtBig(SqueekPack.blocks(s));
+    el.unitsV.textContent = fmtBig(s.totalUnits);
+    el.diffV.textContent = fmt(s.difficulty);
+    el.tagV.textContent = s.tag === "LOCAL" || !s.tag
       ? "LOCAL"
-      : (shift.roundNumber ? "#" + shift.roundNumber + " \u00b7 " : "") + shift.tag;
-    el.tagV.dataset.round = shift.tag && shift.tag !== "LOCAL" ? "seeded" : "none";
+      : (s.roundNumber ? "#" + s.roundNumber + " \u00b7 " : "") + s.tag;
+    el.tagV.dataset.round = s.tag && s.tag !== "LOCAL" ? "seeded" : "none";
+  }
+
+  /* Build the shift that START will hand over. Same seed, same burst stream:
+     SqueekPack.burstsFor is a pure function of (seed, round), so the preview and
+     the played round cannot drift apart without one of them being rebuilt. */
+  function buildPreview(reading) {
+    const s = reading || SqueekChain.state;
+    const round = s.round || SqueekRound.local();
+    preview = SqueekPack.newShift({
+      difficulty: s.difficulty > 0 ? s.difficulty : (readNum(DIFF_KEY) || SqueekPack.MIN_DIFFICULTY),
+      seed: round.seed,
+      tag: round.number ? round.tag : "LOCAL",
+      roundNumber: round.number || 0,
+    });
+    previewRoundKey = s.round ? String(s.round.number) : "local";
+    return preview;
   }
 
   function paint() {
@@ -324,17 +382,30 @@
     closeAllSheets();
 
     const chain = SqueekChain.state;
-    const round = chain.round || SqueekRound.local();
     const difficulty = chain.difficulty > 0
       ? chain.difficulty
       : (readNum(DIFF_KEY) || SqueekPack.MIN_DIFFICULTY);
 
-    shift = SqueekPack.newShift({
-      difficulty,
-      seed: round.seed,
-      tag: round.number ? round.tag : "LOCAL",
-      roundNumber: round.number || 0,
-    });
+    /* Hand over the shift that is on screen instead of building a second one.
+       The bursts were already fixed by the seed, so this is what makes "the
+       burst in the chute is the burst you get" true rather than a promise. Only
+       the price is refreshed, because difficulty is read live and prices work
+       without ever deciding which bursts arrive. */
+    if (preview) {
+      shift = preview;
+      preview = null;
+      previewRoundKey = null;
+      shift.difficulty = difficulty;
+      shift.startDifficulty = difficulty;
+    } else {
+      const round = chain.round || SqueekRound.local();
+      shift = SqueekPack.newShift({
+        difficulty,
+        seed: round.seed,
+        tag: round.number ? round.tag : "LOCAL",
+        roundNumber: round.number || 0,
+      });
+    }
 
     phase = "play";
     el.board.dataset.state = "play";
@@ -402,6 +473,10 @@
     el.rNote.textContent =
       "Block units are the whitepaper's arithmetic on the difficulty above, not a chain balance. " +
       "Nothing here is signed, spent, or held by a wallet.";
+
+    // the next shift is already on deck behind the results sheet
+    buildPreview(SqueekChain.state);
+    paintChute();
 
     openSheet(el.results);
   }
@@ -716,10 +791,16 @@
     el.burstValue.textContent = "\u2014";
     el.burstNo.textContent = "";
     el.burstUnit.textContent = "WORK UNITS";
-    el.burstHint.textContent = "Press START to open the round.";
+    el.burstHint.textContent = "Reading the wheel before the first burst.";
     el.blocksV.textContent = "0";
     el.unitsV.textContent = "0";
     el.tagV.textContent = "no seed";
+
+    /* The chute is loaded before the first poll comes back, from whatever the
+       page can read right now, so a reviewer never lands on an empty form. When
+       the first real reading arrives it carries a block, which rebuilds this. */
+    buildPreview(SqueekChain.state);
+    paint();
 
     SqueekChain.start(paintChain);
   }
