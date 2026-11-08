@@ -478,6 +478,23 @@
     buildPreview(SqueekChain.state);
     paintChute();
 
+    /* The sheet is thrown away when it closes, so the shift is written down here
+       from the same numbers the sheet is showing. One record, one write. */
+    if (window.SqueekLog) {
+      window.SqueekLog.add({
+        t: Date.now(),
+        tag: shift.tag,
+        roundNumber: shift.roundNumber,
+        blocks: Number(blocks),
+        units: units.toString(),
+        work: work,
+        fill: fillPct,
+        sealed: shift.sealed,
+        diffFrom: shift.startDifficulty,
+        diffTo: shift.difficulty,
+      });
+    }
+
     openSheet(el.results);
   }
 

@@ -46,6 +46,22 @@ Two consequences the game is built around:
   to go. A round that lands exactly on 10,000 is **sealed**.
 - A shift is four rounds. Score is Squeek blocks completed.
 
+## Below the board
+
+The round owns one screen. Everything under it is a manual page, and every panel reads the
+same chain reading the chute is priced with:
+
+- **What a round is worth.** Drag the rule and the page prices a round at the live
+  difficulty with the whitepaper's own expression, including where the round leaves the
+  difficulty afterwards.
+- **The wheel, right now.** Block height, block progress, core status and the difficulty,
+  plus a line drawn from the samples this visit has taken. No second poller: the panel
+  reads what the game already reads.
+- **The shift log.** A finished shift dies with its results sheet, so each one is written
+  to this browser: seed, blocks, work, fill, rounds sealed. Ten deep, totals on top.
+- **The holder ladder.** LIGHT, HEAVY, PRIME, what each weight counts and what it buys.
+- **Questions worth asking.** Including the answers that make the page look worse.
+
 ## What is real, and what is the arcade
 
 Real: the round cap, the reject rule, the pricing, the difficulty ratchet, the block

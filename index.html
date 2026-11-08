@@ -24,6 +24,10 @@ try {
 
 <main class="stage">
 
+  <!-- The fold: the round owns exactly one screen. Everything below it is the
+       workshop and starts past the fold, so scrolling is a choice, not a need. -->
+  <div class="fold">
+
   <header class="hud">
     <div class="hud__left">
       <h1 class="wordmark">SQUEEK <span>PACK</span></h1>
@@ -115,13 +119,205 @@ try {
     </dl>
   </section>
 
+  </div><!-- /fold -->
+
+  <!-- Below the board: the workshop. Every panel here reads the same chain
+       reading the game reads. Nothing here is filler and nothing is a mock. -->
+
+  <nav class="jump" aria-label="Sections below the round">
+    <a href="#price">01 worth</a>
+    <a href="#wheel">02 wheel</a>
+    <a href="#log">03 log</a>
+    <a href="#ladder">04 ladder</a>
+    <a href="#faq">05 questions</a>
+  </nav>
+
+  <section class="deep" id="price" aria-labelledby="priceTitle">
+    <header class="deep__head">
+      <p class="deep__no">01</p>
+      <div>
+        <h2 class="deep__title" id="priceTitle">What a round is worth</h2>
+        <p class="deep__lead">Difficulty is the work that one thousand Squeek blocks cost. Drag the rule and the page prices a round at the difficulty it is reading right now, with the whitepaper's own expression rather than an animation of one.</p>
+      </div>
+    </header>
+    <div class="calc">
+      <div class="calc__top">
+        <label class="k" for="calcWork">WORK PACKED IN ONE ROUND</label>
+        <p class="calc__value"><b id="calcWorkV">5,000</b> <span class="k">of 10,000</span></p>
+      </div>
+      <input class="calc__slider" id="calcWork" type="range" min="0" max="10000" step="50" value="5000"
+             aria-describedby="calcNote">
+      <div class="calc__presets" role="group" aria-label="Round sizes">
+        <button class="ghostbtn" type="button" data-work="0">EMPTY</button>
+        <button class="ghostbtn" type="button" data-work="2600">LEAN</button>
+        <button class="ghostbtn" type="button" data-work="5200">STEADY</button>
+        <button class="ghostbtn" type="button" data-work="8000">HEAVY</button>
+        <button class="ghostbtn" type="button" data-work="10000">SEALED</button>
+      </div>
+      <dl class="calc__out">
+        <div><dt class="k">BLOCK UNITS</dt><dd class="v" id="calcUnits">0</dd></div>
+        <div><dt class="k">SQUEEK BLOCKS</dt><dd class="v" id="calcBlocks">0</dd></div>
+        <div><dt class="k">DIFFICULTY AFTER</dt><dd class="v" id="calcDiff">0</dd></div>
+        <div><dt class="k">ROUND FILLED</dt><dd class="v" id="calcFill">0%</dd></div>
+      </dl>
+      <p class="deep__note" id="calcNote">Reading the difficulty before pricing anything.</p>
+    </div>
+  </section>
+
+  <section class="deep" id="wheel" aria-labelledby="wheelTitle">
+    <header class="deep__head">
+      <p class="deep__no">02</p>
+      <div>
+        <h2 class="deep__title" id="wheelTitle">The wheel, right now</h2>
+        <p class="deep__lead">The same reading the chute is priced with, shown without the game on top of it: the block he is on, how far into that block he is, and what a thousand blocks cost.</p>
+      </div>
+    </header>
+    <dl class="wheelgrid">
+      <div class="wheelgrid__cell">
+        <dt class="k">BLOCK HEIGHT</dt>
+        <dd class="v" id="wHeight">reading</dd>
+        <p class="wheelgrid__note">seeds every shift</p>
+      </div>
+      <div class="wheelgrid__cell">
+        <dt class="k">WORK PER 1,000 BLOCKS</dt>
+        <dd class="v" id="wDiff">reading</dd>
+        <p class="wheelgrid__note">the difficulty, price of everything</p>
+      </div>
+      <div class="wheelgrid__cell">
+        <dt class="k">CORE</dt>
+        <dd class="v" id="wCore">reading</dd>
+        <p class="wheelgrid__note" id="wFresh">freshness unknown</p>
+      </div>
+      <div class="wheelgrid__cell">
+        <dt class="k">BLOCK PROGRESS</dt>
+        <dd class="v" id="wProgress">reading</dd>
+        <div class="wheelgrid__bar" aria-hidden="true"><i id="wBar"></i></div>
+      </div>
+    </dl>
+    <figure class="spark">
+      <figcaption class="k">DIFFICULTY AS THIS PAGE HAS READ IT SINCE YOU OPENED IT</figcaption>
+      <svg class="spark__svg" viewBox="0 0 320 60" preserveAspectRatio="none" role="img" aria-labelledby="sparkLabel">
+        <title id="sparkLabel">Difficulty readings from this visit</title>
+        <polyline id="sparkLine" points="" fill="none" stroke="currentColor" stroke-width="1.5" vector-effect="non-scaling-stroke"></polyline>
+      </svg>
+      <p class="spark__foot"><span id="sparkRange">no readings yet</span><span id="sparkCount">0 samples</span></p>
+    </figure>
+    <p class="deep__note" id="wheelNote">Read through api.squeekchain.com/v1/status with a SqueekCore.state() call behind it. Every value here is the one the chute is priced with.</p>
+  </section>
+
+  <section class="deep" id="log" aria-labelledby="logTitle">
+    <header class="deep__head">
+      <p class="deep__no">03</p>
+      <div>
+        <h2 class="deep__title" id="logTitle">The shift log</h2>
+        <p class="deep__lead">A shift dies with its results sheet. This is where it outlives it: what the seed was, how much of the round you actually filled, and how many rounds you sealed.</p>
+      </div>
+    </header>
+    <div class="log" id="logBox">
+      <div class="log__totals">
+        <div><span class="k">SHIFTS</span><b id="logShifts">0</b></div>
+        <div><span class="k">WORK PACKED</span><b id="logWork">0</b></div>
+        <div><span class="k">ROUNDS SEALED</span><b id="logSealed">0</b></div>
+        <div><span class="k">BEST FILL</span><b id="logBest">0%</b></div>
+      </div>
+      <table class="log__table">
+        <caption class="k">The last ten shifts closed in this browser</caption>
+        <thead>
+          <tr><th scope="col">Seed</th><th scope="col">Blocks</th><th scope="col">Work</th><th scope="col">Fill</th><th scope="col">Sealed</th></tr>
+        </thead>
+        <tbody id="logRows"></tbody>
+      </table>
+      <p class="deep__note" id="logNote">No shift has closed in this browser yet. The log fills as you finish them.</p>
+      <button class="ghostbtn ghostbtn--quiet" id="logClear" type="button" hidden>CLEAR THIS LOG</button>
+    </div>
+  </section>
+
+  <section class="deep" id="ladder" aria-labelledby="ladderTitle">
+    <header class="deep__head">
+      <p class="deep__no">04</p>
+      <div>
+        <h2 class="deep__title" id="ladderTitle">The holder ladder</h2>
+        <p class="deep__lead">Three weights, one thing on offer. A profile is counted, not trusted, and what it buys is sight: the next burst before it arrives.</p>
+      </div>
+    </header>
+    <ul class="tiers">
+      <li class="tier">
+        <p class="tier__name">Light</p>
+        <p class="tier__weight">weight 1 to 2</p>
+        <p class="tier__what">One burst of sight.</p>
+        <p class="tier__how">A Squeek in the wallet, a holder collection, a builder badge. One point each, so a single Squeek is already enough.</p>
+      </li>
+      <li class="tier">
+        <p class="tier__name">Heavy</p>
+        <p class="tier__weight">weight 3 to 5</p>
+        <p class="tier__what">One burst of sight, tier stamped on the card.</p>
+        <p class="tier__how">A staked Squeek counts two, because staking is the half that does the work. Three Squeeks, or one staked and one loose.</p>
+      </li>
+      <li class="tier">
+        <p class="tier__name">Prime</p>
+        <p class="tier__weight">weight 6 or more</p>
+        <p class="tier__what">One burst of sight, tier stamped on the card.</p>
+        <p class="tier__how">One-of-one trophies count three: First Squeek, First Invitooor, First Buildooooor. The ladder tops out here.</p>
+      </li>
+    </ul>
+    <p class="deep__note">A tier buys sight, never score. Nothing in the whitepaper makes a Squeek worth more work, so nothing here does either.</p>
+    <button class="ghostbtn ghostbtn--wide" id="ladderBtn" type="button">OPEN THE HOLDER SHIFT</button>
+  </section>
+
+  <section class="deep" id="faq" aria-labelledby="faqTitle">
+    <header class="deep__head">
+      <p class="deep__no">05</p>
+      <div>
+        <h2 class="deep__title" id="faqTitle">Questions worth asking</h2>
+        <p class="deep__lead">Short answers, including the ones that make the page look worse.</p>
+      </div>
+    </header>
+    <div class="faq">
+      <details>
+        <summary>Is any of this on chain?</summary>
+        <p>No. Nothing is signed, spent, or held by a wallet, and no transaction is ever sent. The numbers are the whitepaper's arithmetic replayed against a live difficulty reading. Block units are a calculation, not a balance.</p>
+      </details>
+      <details>
+        <summary>Then what is real here?</summary>
+        <p>The reading. Block height, block progress and the difficulty the chute prices work with all come from api.squeekchain.com, with a SqueekCore.state() call on Sepolia behind it when the API is silent. Every number on this page can be recomputed by hand from the four expressions in HOW THIS WORKS.</p>
+      </details>
+      <details>
+        <summary>Why does the wheel sometimes say GHOST?</summary>
+        <p>Because he is not running. When the telemetry says the core is idle or the reading is stale, the shift switches to GHOST WHEEL and the bursts are drawn from the last block instead of a live stream. It says so on the badge instead of pretending the wheel is turning.</p>
+      </details>
+      <details>
+        <summary>Why was my burst rejected?</summary>
+        <p>It did not fit. A round holds 10,000 work units and a burst that would push past that is refused, even if only 50 of it is over. The burst still leaves the chute, so a rejected take costs you the burst and the room it would have used.</p>
+      </details>
+      <details>
+        <summary>Can I get the same shift twice?</summary>
+        <p>Yes, and that is the point. The burst stream is a pure function of the block number and the round index, so anyone opening the page on the same block gets the same twelve bursts. SHIFT SEED is the first four hex of that block.</p>
+      </details>
+      <details>
+        <summary>Does holding a Squeek raise my score?</summary>
+        <p>No. A tier shows you the next burst early and stamps your card. It never multiplies work, because a tier is not a multiplier in the whitepaper. If it did, the score would measure wallets instead of decisions.</p>
+      </details>
+      <details>
+        <summary>Where do my scores live?</summary>
+        <p>In this browser, under squeekpack keys in local storage. Clearing site data erases the log. Nothing is uploaded, and there is no account to log into.</p>
+      </details>
+    </div>
+  </section>
+
   <footer class="foot">
     <p id="source">Reading api.squeekchain.com/v1/status</p>
     <div class="foot__right">
+      <nav class="foot__links" aria-label="Elsewhere">
+        <a href="https://squeekchain.com" target="_blank" rel="noopener noreferrer">Squeekchain</a>
+        <a href="https://github.com/EVM0x/squeek-pack" target="_blank" rel="noopener noreferrer">Source</a>
+        <a href="https://evm0x.com" target="_blank" rel="noopener noreferrer">evm0x</a>
+      </nav>
       <p class="foot__note">An arcade, not a product. No tokens, no wallet, nothing to buy.</p>
-      <a class="foot__mark" href="https://evm0x.com" target="_blank" rel="noopener noreferrer">Built by evm0x</a>
+      <a class="foot__mark" href="https://evm0x.com" target="_blank" rel="noopener noreferrer">SC from evm0x</a>
     </div>
   </footer>
+
+  <button class="totop" id="totop" type="button" aria-label="Back to the round">&uarr; ROUND</button>
 
   <div class="sheet" id="results" hidden>
     <div class="sheet__card" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="resultsTitle">
@@ -230,6 +426,7 @@ try {
 <script src="pack.js"></script>
 <script src="holder.js"></script>
 <script src="chain.js"></script>
+<script src="sections.js"></script>
 <script src="packer.js"></script>
 </body>
 </html>

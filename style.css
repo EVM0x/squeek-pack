@@ -82,12 +82,22 @@ button { font-family: inherit; }
 }
 
 .stage {
-  min-height: 100dvh;
   max-width: 1080px;
   margin: 0 auto;
-  padding: clamp(8px, 2vh, 20px) clamp(12px, 3.2vw, 30px);
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  padding: 0 clamp(12px, 3.2vw, 30px) clamp(8px, 2vh, 20px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(6px, 1.4vh, 14px);
+}
+
+/* One screen for the round, however tall the workshop under it gets. A flex
+   column alone would squeeze the board as soon as the sections made the page
+   taller than the viewport, which is the one thing the arcade cannot afford. */
+.fold {
+  min-height: 100dvh;
+  padding-top: clamp(8px, 2vh, 20px);
+  display: flex;
+  flex-direction: column;
   gap: clamp(6px, 1.4vh, 14px);
 }
 
@@ -189,6 +199,8 @@ kbd {
   flex-direction: column;
   justify-content: center;
   gap: clamp(8px, 1.6vh, 18px);
+  /* owns the first screen; the sections below it start past the fold */
+  flex: 1 1 auto;
   min-height: 0;
 }
 
@@ -695,7 +707,9 @@ kbd {
 /* A phone in portrait is the screen this game is actually played on, so it gets
    its own type scale rather than a squeezed desktop one. */
 @media (max-width: 400px) {
-  .stage { padding: 6px 10px; gap: 5px; }
+  /* the fold carries the top padding now, so the stage only owns the sides */
+  .stage { padding: 0 10px 6px; gap: 5px; }
+  .fold { padding-top: 6px; gap: 5px; }
   .hud { gap: 4px 8px; padding-bottom: 4px; }
   .wordmark { font-size: 19px; }
   .hud__right { gap: 4px; }
@@ -722,7 +736,8 @@ kbd {
 }
 
 @media (max-height: 620px) {
-  .stage { padding-top: 6px; padding-bottom: 6px; gap: 5px; }
+  .stage { padding-bottom: 6px; gap: 5px; }
+  .fold { padding-top: 6px; gap: 5px; }
   .board { gap: 6px; }
   .chute { min-height: 96px; }
   .chute__value { font-size: clamp(30px, 8.5vh, 46px); }
@@ -735,4 +750,386 @@ kbd {
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
+}
+
+/* ---------- the workshop, below the board ----------
+
+   The board owns the first screen. Everything past it is a manual page: numbered
+   sections, thin rules, no cards floating in space. A section is a heading, one
+   panel of real numbers, and a note that admits what the panel cannot do. */
+
+.jump {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+  margin-top: clamp(8px, 1.8vh, 16px);
+}
+
+.jump a {
+  font-family: var(--data);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  padding: 4px 7px;
+  transition: color 0.14s ease, border-color 0.14s ease;
+}
+
+.jump a:hover,
+.jump a:focus-visible { color: var(--ink); border-color: var(--ink); }
+
+.deep {
+  border-top: 1px solid var(--line);
+  padding-top: clamp(18px, 4vh, 34px);
+  padding-bottom: clamp(14px, 3vh, 26px);
+}
+
+.deep__head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px 14px;
+  align-items: start;
+}
+
+.deep__no {
+  margin: 0;
+  font-family: var(--data);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  border: 1px solid currentColor;
+  padding: 1px 5px;
+}
+
+.deep__title {
+  margin: 0 0 6px;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(24px, 5.4vw, 36px);
+  line-height: 0.94;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.deep__lead {
+  margin: 0;
+  max-width: 64ch;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--dim);
+}
+
+.deep__note {
+  margin: 10px 0 0;
+  max-width: 74ch;
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--faint);
+}
+
+/* 01 the calculator */
+
+.calc {
+  margin-top: 16px;
+  padding: clamp(10px, 2.4vw, 18px);
+  background: var(--plate);
+  border: 1px solid var(--line);
+}
+
+.calc__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.calc__value { margin: 0; display: flex; align-items: baseline; gap: 6px; }
+
+.calc__value b {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(26px, 6.4vw, 42px);
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.calc__slider {
+  display: block;
+  width: 100%;
+  height: 28px;
+  margin: 10px 0 2px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.calc__presets { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+
+.calc__out {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 14px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.calc__out div { min-width: 0; }
+.calc__out dt { margin: 0 0 3px; }
+.calc__out dd {
+  margin: 0;
+  font-family: var(--data);
+  font-size: clamp(12px, 3vw, 17px);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+/* 02 the wheel panel */
+
+.wheelgrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 16px 0 0;
+  padding: clamp(10px, 2.4vw, 18px);
+  background: var(--plate);
+  border: 1px solid var(--line);
+}
+
+.wheelgrid__cell { min-width: 0; }
+.wheelgrid__cell dt { margin: 0; }
+
+.wheelgrid__cell dd {
+  margin: 4px 0 0;
+  font-family: var(--data);
+  font-size: clamp(14px, 3.4vw, 20px);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.wheelgrid__cell dd[data-state="unset"] { color: var(--faint); }
+.wheelgrid__cell dd[data-mode="live"] { color: var(--accent); }
+.wheelgrid__cell dd[data-mode="ghost"] { color: var(--gold); }
+.wheelgrid__cell dd[data-mode="offline"] { color: var(--red); }
+
+.wheelgrid__note { margin: 4px 0 0; font-size: 10px; line-height: 1.4; color: var(--faint); }
+
+.wheelgrid__bar {
+  height: 5px;
+  margin-top: 8px;
+  background: var(--raised);
+  border: 1px solid var(--line);
+}
+
+.wheelgrid__bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  transition: width 0.4s ease;
+}
+
+.spark { margin: 14px 0 0; padding: 0; }
+.spark figcaption { display: block; }
+
+.spark__svg {
+  display: block;
+  width: 100%;
+  height: 64px;
+  margin-top: 6px;
+  color: var(--accent);
+  border-bottom: 1px solid var(--line);
+}
+
+.spark__foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 6px 0 0;
+  font-family: var(--data);
+  font-size: 10px;
+  color: var(--faint);
+}
+
+/* 03 the log */
+
+.log__totals {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+  padding: clamp(10px, 2.4vw, 16px);
+  background: var(--plate);
+  border: 1px solid var(--line);
+}
+
+.log__totals div { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+
+.log__totals b {
+  font-family: var(--data);
+  font-size: clamp(15px, 3.6vw, 22px);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.log__table {
+  width: 100%;
+  margin-top: 12px;
+  border-collapse: collapse;
+  font-family: var(--data);
+  font-size: 11px;
+}
+
+.log__table caption { text-align: left; padding-bottom: 6px; }
+
+.log__table th {
+  text-align: left;
+  font-weight: 400;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+  border-bottom: 1px solid var(--line);
+  padding: 0 6px 5px 0;
+}
+
+.log__table td {
+  border-bottom: 1px solid var(--line);
+  padding: 6px 6px 6px 0;
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.log__table td:first-child { color: var(--ink); }
+.log__table td:last-child,
+.log__table th:last-child { text-align: right; padding-right: 0; }
+
+.log[data-empty="yes"] .log__table { display: none; }
+
+/* 04 the ladder */
+
+.tiers {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 16px 0 0;
+  padding: 0;
+}
+
+.tier { padding: 12px; background: var(--plate); border: 1px solid var(--line); }
+
+.tier__name {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.tier__weight {
+  margin: 3px 0 8px;
+  font-family: var(--data);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.tier__what { margin: 0 0 6px; font-size: 12px; line-height: 1.45; color: var(--ink); }
+.tier__how { margin: 0; font-size: 11px; line-height: 1.5; color: var(--faint); }
+
+/* 05 the questions */
+
+.faq { margin-top: 16px; border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); }
+
+.faq summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 0;
+  font-size: 13px;
+  color: var(--ink);
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq summary::-webkit-details-marker { display: none; }
+
+.faq summary::after {
+  content: "+";
+  font-family: var(--data);
+  color: var(--faint);
+  flex: none;
+}
+
+.faq details[open] summary::after { content: "\2013"; }
+
+.faq p {
+  margin: 0 0 12px;
+  max-width: 70ch;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--dim);
+}
+
+/* back to the round, once the round is out of sight */
+
+.totop {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  z-index: 10;
+  display: none;
+  padding: 8px 10px;
+  font-family: var(--data);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--ink);
+  background: var(--plate);
+  border: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.totop[data-show="yes"] { display: block; }
+.totop:hover { border-color: var(--ink); }
+
+.foot__links { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.foot__links a {
+  font-family: var(--data);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  text-decoration: none;
+}
+
+.foot__links a:hover,
+.foot__links a:focus-visible { color: var(--ink); }
+
+@media (max-width: 720px) {
+  .calc__out { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .wheelgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tiers { grid-template-columns: 1fr; }
+  .log__totals { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 400px) {
+  .deep__title { font-size: 24px; }
+  .deep__lead { font-size: 12px; }
+  .jump a { font-size: 8px; padding: 3px 5px; }
+  .log__table { font-size: 10px; }
 }
