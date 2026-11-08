@@ -8,13 +8,14 @@ what you want, change it here first and the build follows.
 
 An instrument, not a dashboard. Squeektoshi's wheel produces work one pass at a time, and
 work is counted in rounds of ten minutes. You are the one closing the rounds: his running
-arrives as bursts, a round holds 10,000 work units, and work never moves between rounds. One
-screen, no scroll, no wallet.
+arrives as bursts, a round holds 10,000 work units, and work never moves between rounds. The
+round owns one screen; the manual page under it explains the arithmetic. No wallet.
 
 ## Identity
 
-A workshop bench with a measuring rule on it. The paper is a chalk green, the ink is
-green-black, and the only bright thing in the room is the work that has actually been
+A workshop bench with a measuring rule on it, in the shop's own colours. The bench is the
+same black and red as evm0x.com, because Squeek Pack is a thing built in that shop and
+should read as one. The only bright thing in the room is the work that has actually been
 counted.
 
 Motif: **the rule and the stamp**. The round is drawn as a steel rule with ten major ticks,
@@ -24,26 +25,32 @@ Nothing floats, nothing glows, nothing is a card except the two sheets that inte
 
 ## Palette
 
-| Role | Value | Why |
-|---|---|---|
-| Paper | `#e9ece2` | A chalk-green bench top, not a grey UI canvas and not cream. The room is a workshop, so the paper has a tint of the machine in it. |
-| Ink | `#191c17` | Text and the fill. Nearly black, green-black rather than neutral. |
-| Machine green | `#1c6b45` | Work that is packed, the live chip, the sealed round. One accent, spent only on the count. |
-| Ghost gold | `#6f5209` | State: he is asleep, the difficulty is a replay, no settlement. |
-| Miss red | `#a3301f` | State: a burst was rejected, or an endpoint is unreachable. |
-| Rule line | `#c2c7b8` | The tick marks. They are a measuring scale, so they are drawn, not coloured. |
+The bench runs evm0x.com's palette: black paper, white ink, one red. Night is the default,
+because the shop it belongs to is black.
+
+| Role | Value (night) | Value (day) | Why |
+|---|---|---|---|
+| Paper | `#000000` | `#f5f5f5` | evm0x.com's own background, unchanged. Pure black, no blue-grey tint. |
+| Plate | `#0b0b0b` | `#ffffff` | The one raised surface: the chute. Barely lighter than the paper, separated by a hairline, not a shadow. |
+| Ink | `#f5f5f5` | `#0a0a0a` | evm0x.com's text colour. 19.3:1 on black. |
+| Brand red | `#eb0004` | `#eb0004` | evm0x.com's accent, used for fills only: the packed rule, the timer, the primary button, the card's stamp. |
+| Red text | `#ff3b3b` | `#c40003` | The same red lifted (night) or deepened (day) so red text clears AA on its plate: 5.94:1 and 5.75:1. The brand red as text is 4.53:1 on pure black and 4.25:1 on the plate, so it is not used for type. |
+| Ghost gold | `#e0b341` | `#7a5200` | State: he is asleep, the difficulty is a replay, no settlement. |
+| Miss red | `#ff5252` | `#b00003` | State: a burst was rejected, or an endpoint is unreachable. |
+| Hairline | `#222222` | `#dcdcdc` | evm0x.com's border colour. Rules and ticks, drawn not coloured. |
 
 The three state colours are a status system, not decoration. Each appears only on the chip,
-the flash line, or the burst plate. Every text token is checked against its own background:
-`--ink` 14.4:1, `--dim` 5.77:1, `--faint` 5.13:1, the primary button 5.03:1 on paper, all
-clearing AA. In dark theme the lowest ratio is 6.45:1.
+the flash line, or the burst plate. Every text token is checked against its own background,
+measured in the browser with a script rather than by eye: the lowest ratio in either theme is
+5.13:1, and the primary button's white label on `#eb0004` is 4.63:1. A palette scan returns no
+green or blue left anywhere in either theme.
 
 ## Typography
 
 | Face | Where | Why |
 |---|---|---|
 | Big Shoulders Display 800 / 600 | Burst numerals, the score, the wordmark, sheet titles | A plate stamped on a machine: tall, narrow, industrial. The burst has to be readable at arm's length while a clock is running. |
-| JetBrains Mono 400 / 600 | Every measured value, every label, every button | The numbers come off a machine endpoint, so they are set in a machine face, and tabular figures keep a live counter from jittering. This is a readout, not a terminal costume: there is no fake window, no prompt, no typed-out command. |
+| Cascadia Code, falling back to JetBrains Mono, 400 / 600 | Every measured value, every label, every button | evm0x.com sets its own text in Cascadia Code, so the shop's face comes first here too. Where it is not installed, JetBrains Mono is the closest match with tabular figures, which keep a live counter from jittering. This is a readout, not a terminal costume: there is no fake window, no prompt, no typed-out command. |
 | Work Sans 400 | Sheet prose only | Long explanation needs a text face. It never appears in the play area, where every word is a label. |
 
 **On the uppercase micro-labels** (R-06): `ROUND`, `PACKED`, `CAP`, `WORK UNITS` are set at

@@ -75,11 +75,14 @@ const SqueekCard = (() => {
   const W = 1200;
   const H = 630;
 
+  // The card carries the same palette as the page: black paper and evm0x red at
+  // night, white paper and the darkened red by day. accent is the solid brand
+  // red here, because it is drawn as a bar and a stamp rather than as text.
   function palette() {
-    const dark = document.documentElement.dataset.theme === "dark";
+    const dark = document.documentElement.dataset.theme !== "light";
     return dark
-      ? { bg: "#10150f", ink: "#eef3ee", soft: "#93a698", accent: "#86dc9e", line: "#2b322a", dim: "#3d4a3c" }
-      : { bg: "#eef1e6", ink: "#12160f", soft: "#5c6b60", accent: "#1c6b45", line: "#ccd2c2", dim: "#dfe4d5" };
+      ? { bg: "#000000", ink: "#f5f5f5", soft: "#b9b9b9", accent: "#eb0004", line: "#222222", dim: "#333333" }
+      : { bg: "#ffffff", ink: "#0a0a0a", soft: "#3a3a3a", accent: "#eb0004", line: "#dcdcdc", dim: "#c4c4c4" };
   }
 
   function fmt(n) {

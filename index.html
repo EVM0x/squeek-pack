@@ -5,13 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Squeek Pack: pack the round</title>
 <meta name="description" content="His work arrives in bursts and a round holds 10,000 work units. Pack what fits before the round closes. The rules are the Squeekchain whitepaper's, replayed.">
-<meta name="theme-color" content="#e9ece2">
+<meta name="theme-color" content="#000000">
 <script>
 try {
   var saved = localStorage.getItem("squeekpack.theme.v1");
-  if (saved !== "dark" && saved !== "light") {
-    saved = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  }
+  // the bench is black by default, because the shop it belongs to is
+  if (saved !== "light") saved = "dark";
   document.documentElement.dataset.theme = saved;
 } catch (e) {}
 </script>

@@ -1,58 +1,66 @@
 /* SQUEEK PACK.
 
-   The room is a workshop bench, not a dashboard. Paper is a chalk green, ink is
-   green-black, and there is one accent: machine green, spent only on the work
-   that has actually been packed and on the one button that commits it.
+   The room is a workshop bench, not a dashboard. Black paper, white ink, and one
+   accent: EVM0x red, spent only on the work that has actually been packed and on
+   the one button that commits it.
+
+   The palette is evm0x.com's own: #000 paper, #f5f5f5 ink, #EB0004 accent, #222
+   hairlines. Same shop, different bench.
 
    Motif: the measuring rule and the stamp. The round is a steel rule with ten
    marks, one per thousand work units. Every number on the page sits under a
    thin rule, never in a floating card. */
 
 :root {
-  --bg: #e9ece2;
-  --raised: #dfe3d7;
-  --plate: #f2f4ec;
-  --ink: #191c17;
-  --line: #ccd2c2;
-  --rule-line: #b9c1ad;
-  --dim: #565c50;
-  --faint: #5d6456;
-  --accent: #1c6b45;
-  --accent-lit: #227a4f;
-  --pad: #d8e8bd;
-  --gold: #6f5209;
-  --red: #a3301f;
-  --live-bg: #dfeede;
-  --ghost-bg: #f2ecd7;
-  --offline-bg: #f4e4df;
-  --hatch: rgba(28, 107, 69, 0.16);
-  --shadow: 0 1px 0 rgba(25, 28, 23, 0.06);
+  --bg: #000000;
+  --raised: #0a0a0a;
+  --plate: #0b0b0b;
+  --ink: #f5f5f5;
+  --line: #222222;
+  --rule-line: #333333;
+  --dim: #b9b9b9;
+  --faint: #8a8a8a;
+  /* Two reds on purpose. --accent is the red text is drawn in and has to clear
+     AA on the plate (5.9:1). --accent-solid is the brand red from evm0x.com,
+     used for fills only, where the label on top carries the contrast (4.6:1). */
+  --accent: #ff3b3b;
+  --accent-solid: #eb0004;
+  --accent-lit: #ff6b6b;
+  --pad: #1a0403;
+  --gold: #e0b341;
+  --red: #ff5252;
+  --live-bg: #1a0403;
+  --ghost-bg: #1a1508;
+  --offline-bg: #101010;
+  --hatch: rgba(235, 0, 4, 0.22);
+  --shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
   --display: "Big Shoulders Display", "Arial Narrow", sans-serif;
-  --data: "JetBrains Mono", ui-monospace, monospace;
+  --data: "Cascadia Code", "JetBrains Mono", ui-monospace, monospace;
   --voice: "Work Sans", system-ui, sans-serif;
 }
 
-/* Night shift. Same bench after dark: the paper goes blue-black, the accent goes
-   lighter so it still clears AA on the dark plate. */
-:root[data-theme="dark"] {
-  --bg: #131713;
-  --raised: #1d221c;
-  --plate: #191e18;
-  --ink: #eef0e8;
-  --line: #2b322a;
-  --rule-line: #3a4238;
-  --dim: #a5ada0;
-  --faint: #949d90;
-  --accent: #86dc9e;
-  --accent-lit: #9ce8b2;
-  --pad: #26301c;
-  --gold: #e6c76a;
-  --red: #ff9d8c;
-  --live-bg: #162a1c;
-  --ghost-bg: #2c2712;
-  --offline-bg: #301a16;
-  --hatch: rgba(134, 220, 158, 0.18);
-  --shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+/* Day shift. The bench in daylight: white paper, black ink, and the same red
+   darkened until it clears AA as text (5.75:1 on #f5f5f5). */
+:root[data-theme="light"] {
+  --bg: #f5f5f5;
+  --raised: #ececec;
+  --plate: #ffffff;
+  --ink: #0a0a0a;
+  --line: #dcdcdc;
+  --rule-line: #c4c4c4;
+  --dim: #3a3a3a;
+  --faint: #5a5a5a;
+  --accent: #c40003;
+  --accent-solid: #eb0004;
+  --accent-lit: #a00003;
+  --pad: #f7dedd;
+  --gold: #7a5200;
+  --red: #b00003;
+  --live-bg: #fdeceb;
+  --ghost-bg: #f8f0d9;
+  --offline-bg: #efefef;
+  --hatch: rgba(235, 0, 4, 0.2);
+  --shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
 }
 
 * { box-sizing: border-box; }
@@ -239,7 +247,7 @@ kbd {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 
-:root[data-theme="dark"] .rule__track { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04); }
+:root[data-theme="light"] .rule__track { box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.05); }
 
 .rule__fill {
   position: absolute;
@@ -247,7 +255,7 @@ kbd {
   width: 0;
   background:
     repeating-linear-gradient(90deg, var(--hatch) 0 1px, transparent 1px 7px),
-    var(--accent);
+ var(--accent-solid);
   transition: width 0.18s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -333,7 +341,7 @@ kbd {
   display: block;
   height: 100%;
   width: 100%;
-  background: var(--accent);
+  background: var(--accent-solid);
   transform-origin: left center;
 }
 
@@ -363,19 +371,17 @@ kbd {
   appearance: none;
   flex: 1 1 180px;
   min-height: 46px;
-  border: 1px solid var(--accent);
-  background: var(--accent);
-  /* white, not paper: paper on machine green lands at 4.43, just under AA */
-  color: #f7faf4;
+  border: 1px solid var(--accent-solid);
+  background: var(--accent-solid);
+  /* white on the brand red lands at 4.63, over AA for the 11px label */
+  color: #ffffff;
   font-size: 11px;
   letter-spacing: 0.16em;
   cursor: pointer;
   transition: background 0.14s ease, transform 0.08s ease;
 }
 
-:root[data-theme="dark"] .primary { color: #10240f; }
-
-.primary:hover { background: var(--accent-lit); border-color: var(--accent-lit); }
+.primary:hover { background: var(--accent-lit); border-color: var(--accent-lit); color: #ffffff; }
 .primary:active { transform: translateY(1px); }
 .primary[data-fit="over"] { background: transparent; color: var(--red); border-color: var(--red); }
 .primary:disabled { cursor: not-allowed; opacity: 0.55; }
@@ -933,7 +939,7 @@ kbd {
   display: block;
   height: 100%;
   width: 0;
-  background: var(--accent);
+  background: var(--accent-solid);
   transition: width 0.4s ease;
 }
 

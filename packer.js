@@ -613,15 +613,15 @@
   /* ---------- theme and sound ---------- */
 
   function paintThemeBtn() {
-    const dark = document.documentElement.dataset.theme === "dark";
+    const dark = document.documentElement.dataset.theme !== "light";
     el.themeBtn.textContent = dark ? "DAY MODE" : "NIGHT MODE";
     el.themeBtn.setAttribute("aria-pressed", String(dark));
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute("content", dark ? "#131713" : "#e9ece2");
+    if (meta) meta.setAttribute("content", dark ? "#000000" : "#f5f5f5");
   }
 
   function toggleTheme() {
-    const dark = document.documentElement.dataset.theme === "dark";
+    const dark = document.documentElement.dataset.theme !== "light";
     document.documentElement.dataset.theme = dark ? "light" : "dark";
     try { localStorage.setItem(THEME_KEY, dark ? "light" : "dark"); } catch { /* private mode */ }
     paintThemeBtn();
