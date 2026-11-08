@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-label="Squeek Pack">
+  <title>Squeek Pack</title>
+  <desc>A crate, filled from the bottom to just over half, marked in tens like the round it holds.</desc>
+  <!-- The mark is the round itself: a crate filled part of the way, ruled in tens
+       because the round holds ten thousand work units. What is filled is red,
+       what is still room is a hairline. Sharp corners, no rounding, no glow. -->
+  <rect width="48" height="48" fill="#000000"/>
+  <rect x="6" y="7" width="36" height="34" fill="none" stroke="#4a4a4a" stroke-width="2.6"/>
+  <rect x="8.5" y="21" width="31" height="17.5" fill="#EB0004"/>
+  <g fill="#000000">
+    <rect x="15" y="21" width="2" height="17.5"/>
+    <rect x="23" y="21" width="2" height="17.5"/>
+    <rect x="31" y="21" width="2" height="17.5"/>
+  </g>
+</svg>

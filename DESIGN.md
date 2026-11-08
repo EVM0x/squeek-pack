@@ -23,6 +23,22 @@ one per thousand work units, because the whole whitepaper is about measuring a w
 number is set as if it were stamped onto a plate: uppercase, monospaced, tight to its rule.
 Nothing floats, nothing glows, nothing is a card except the two sheets that interrupt play.
 
+### The mark
+
+A crate, filled from the bottom to a little over half, ruled in tens. It is the round drawn
+as an object: the red is work that has been packed, the hairline above it is room still
+open, the ticks are the rule's thousands. Nothing in it is decoration, and nothing in it is
+a letter, so it survives being 16 pixels wide in a browser tab.
+
+Sharp corners, a 2.6 unit stroke, no rounding, no gradient, no glow. The stroke is `#4a4a4a`
+on night and `#b4b4b4` on day, always quieter than the fill, because the packed part is the
+only thing worth looking at. The mark sits in a lockup with the wordmark at `0.42em` gap and
+`1.16em` tall, sized in ems so the two never drift apart when the type scales.
+
+Two files, on purpose: `logo.svg` carries the ticks for anything 24 pixels and up, and
+`favicon.svg` drops them and thickens the crate so the shape still reads in a tab. The share
+card redraws the same mark in canvas, since a canvas cannot take an SVG.
+
 ## Palette
 
 The bench runs evm0x.com's palette: black paper, white ink, one red. Night is the default,

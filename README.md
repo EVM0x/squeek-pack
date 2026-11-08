@@ -95,6 +95,10 @@ rather than inventing a number. With no chain reading at all the seed is marked 
 | `audio.js` | Tones synthesised in the browser, so there are no audio files |
 | `holder.js` | Reads a public profile and returns a tier |
 | `api.php` | Server-side read of a member-code profile. Only needed for member codes |
+| `logo.svg` | The mark at full detail: a crate part filled, ruled in tens. Used in the header |
+| `favicon.svg`, `favicon-16x16.png`, `favicon-32x32.png`, `favicon.ico` | The same mark simplified, so it survives a 16 pixel tab |
+| `apple-touch-icon.png`, `android-chrome-*.png`, `site.webmanifest` | Install icons and manifest |
+| `og.png` | 1200x630 social card, referenced by the `og:image` tags |
 | `DESIGN.md` | The direction this build follows |
 
 `pack.js` is deliberately separable: `node` can load it and check the arithmetic without a

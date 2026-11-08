@@ -81,8 +81,8 @@ const SqueekCard = (() => {
   function palette() {
     const dark = document.documentElement.dataset.theme !== "light";
     return dark
-      ? { bg: "#000000", ink: "#f5f5f5", soft: "#b9b9b9", accent: "#eb0004", money: "#ffc247", line: "#222222", dim: "#333333" }
-      : { bg: "#ffffff", ink: "#0a0a0a", soft: "#3a3a3a", accent: "#eb0004", money: "#7a5200", line: "#dcdcdc", dim: "#c4c4c4" };
+      ? { bg: "#000000", ink: "#f5f5f5", soft: "#b9b9b9", accent: "#eb0004", money: "#ffc247", line: "#222222", mark: "#4a4a4a", dim: "#333333" }
+      : { bg: "#ffffff", ink: "#0a0a0a", soft: "#3a3a3a", accent: "#eb0004", money: "#7a5200", line: "#dcdcdc", mark: "#b4b4b4", dim: "#c4c4c4" };
   }
 
   function fmt(n) {
@@ -126,17 +126,31 @@ const SqueekCard = (() => {
     x.fillStyle = C.bg;
     x.fillRect(0, 0, W, H);
 
+    // the mark, drawn the same way the page draws it: a crate part filled, ruled
+    // in tens. Canvas has no SVG, so it is four rects and three ticks.
+    const MX = 72, MY = 40, MW = 58;
+    x.strokeStyle = C.mark;
+    x.lineWidth = 3;
+    x.strokeRect(MX + 7, MY + 8, MW - 14, MW - 16);
+    x.fillStyle = C.accent;
+    x.fillRect(MX + 10, MY + 25, MW - 20, MW - 34);
+    x.fillStyle = C.bg;
+    for (let i = 1; i <= 3; i++) {
+      x.fillRect(MX + 10 + ((MW - 20) / 4) * i - 1, MY + 25, 2.5, MW - 34);
+    }
+
     // wordmark, set the way the HUD sets it: two words, and the second one is
     // measured rather than guessed so the accent never crowds the first
+    const TX = 72 + MW + 22;
     x.fillStyle = C.ink;
     x.font = '800 50px ' + DISPLAY;
-    x.fillText("SQUEEK", 72, 104);
+    x.fillText("SQUEEK", TX, 104);
     const sqW = x.measureText("SQUEEK").width + x.measureText(" ").width;
     x.fillStyle = C.accent;
-    x.fillText("PACK", 72 + sqW, 104);
+    x.fillText("PACK", TX + sqW, 104);
     x.fillStyle = C.soft;
     x.font = '400 21px ' + MONO;
-    x.fillText("PACK THE ROUND", 72, 142);
+    x.fillText("PACK THE ROUND", TX, 142);
 
     // the tier, when the shift was played on one. Sight is not score, so the
     // badge says TIER and nothing about a multiplier.

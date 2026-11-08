@@ -33,6 +33,8 @@
      meaning. #ffc247 clears AA on every surface here at 12:1 or better. */
   --money: #ffc247;
   --money-line: rgba(255, 194, 71, 0.42);
+  /* the crate outline in the logo mark: readable, never louder than the fill */
+  --mark-line: #4a4a4a;
   --red: #ff5252;
   --live-bg: #1a0403;
   --ghost-bg: #1a1508;
@@ -62,6 +64,7 @@
   --gold: #7a5200;
   --money: #7a5200;
   --money-line: rgba(122, 82, 0, 0.38);
+  --mark-line: #b4b4b4;
   --red: #b00003;
   --live-bg: #fdeceb;
   --ghost-bg: #f8f0d9;
@@ -130,11 +133,31 @@ button { font-family: inherit; }
 
 .hud__left { min-width: 0; }
 
+/* The lockup: the mark sits on the same baseline as the wordmark and is sized in
+   ems, so the two never drift apart when the type scales with the viewport. */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.42em;
+  font-size: clamp(20px, 3.6vw, 30px);
+}
+
+.brandmark {
+  flex: none;
+  display: block;
+  width: 1.16em;
+  height: 1.16em;
+}
+
+.brandmark__crate { fill: none; stroke: var(--mark-line); }
+.brandmark__packed { fill: var(--accent-solid); }
+.brandmark__ticks { fill: var(--bg); }
+
 .wordmark {
   margin: 0;
   font-family: var(--display);
   font-weight: 800;
-  font-size: clamp(20px, 3.6vw, 30px);
+  font-size: 1em;
   line-height: 0.92;
   letter-spacing: 0.01em;
 }
