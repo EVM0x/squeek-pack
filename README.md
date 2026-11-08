@@ -125,3 +125,5 @@ The game itself never needs a server.
 
 Built by [evm0x](https://evm0x.com). Rules and numbers belong to Squeekchain; the arcade
 around them is this repo's.
+
+squeekchain-project: ea3a25e1-6786-476a-a774-eebcc79fd4e7
