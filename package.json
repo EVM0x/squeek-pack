@@ -1,0 +1,9 @@
+{
+  "name": "squeek-pack",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Squeek Pack — the packing rules, and the tests that hold them to the whitepaper",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  }
+}
