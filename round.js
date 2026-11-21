@@ -49,7 +49,9 @@ const SqueekRound = (() => {
   function fromState(state, height) {
     const raw = (state && state.raw) || {};
     const text = "sqk:" + (raw.settled || "0") + ":" + (raw.work || "0") + ":" + (raw.height || "0");
-    return derive(text, height || state.blockHeight);
+    // the guard above tolerates a missing state, so this line has to as well:
+    // `height || state.blockHeight` only hides the crash while a height is given
+    return derive(text, height || (state && state.blockHeight));
   }
 
   // When Sepolia itself is unreachable there is still a block height, and it is
