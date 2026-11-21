@@ -105,6 +105,20 @@ rather than inventing a number. With no chain reading at all the seed is marked 
 browser. That is how the reject path, the seal path, the ratchet and the block boundary were
 verified before the page was wired to them.
 
+Those checks now live in `test/pack.test.js` instead of in a scratch file. Thirty-three tests,
+no dependencies:
+
+```
+npm test
+```
+
+They pin each of the four expressions to the paper (including the `floor` in `floor(29D + ...)`,
+which rounds the ratchet up by a thirtieth of the gap rather than down), the 13,000 offered
+against the 10,000 capacity, that work never crosses a round boundary, that a rejected passage is
+counted as lost, and that the same seed always replays byte for byte. The last of the twelve
+bursts is the remainder that makes the round add up, so it can land off the size table — that is
+asserted as its own invariant rather than left implicit.
+
 ## Running it
 
 Static hosting is enough:

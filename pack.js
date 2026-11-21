@@ -241,3 +241,6 @@ const SqueekPack = (() => {
     newShift, current, peek, remaining, roundOver, take, pass, settle, blocks, fillRate,
   };
 })();
+
+// Under node the tests import this file directly; in the browser it stays a plain script.
+if (typeof module !== "undefined" && module.exports) module.exports = SqueekPack;
